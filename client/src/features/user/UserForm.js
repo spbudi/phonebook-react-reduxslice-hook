@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
-import { addUser } from "../actions/users";
+import React,{ useCallback, useState } from "react";
 import { useDispatch } from 'react-redux'
+import { create } from "./userSlice"
 
 export default function UserForm(props) {
 
@@ -23,9 +23,9 @@ export default function UserForm(props) {
 
     const handleSubmit = useCallback((event) => {
         event.preventDefault()
-        dispatch(addUser(user.name, user.phone))
+        dispatch(create(user.name, user.phone))
         setUser({ name: '', phone: '' })
-    }, [user])
+    }, [dispatch, user])
 
     return (
         <form onSubmit={handleSubmit}>

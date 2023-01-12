@@ -1,22 +1,21 @@
-import UserItem from "../components/UserItem"
+import UserItem from "../../components/UserItem"
 import React, { useEffect } from "react"
-import { loadUser, removeUser, resendUser, updateUser, loadMore } from "../actions/users";
+import { loadUserAsync, loadPagination, addUserAsync, removeUserAsync, updateUserAsync, selectUser } from './userSlice'
 import { useDispatch, useSelector } from "react-redux";
 
 export default function UserList (props) {
 
-    const users = useSelector((state) => state.users.data)
-
+    const users = useSelector(selectUser)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(loadUser())
+        dispatch(loadUserAsync())
     },[dispatch])
 
      const scrolling = (event) => {
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-            dispatch(loadMore())
+            dispatch(loadPagination())
         }
     }
 
@@ -40,9 +39,9 @@ export default function UserList (props) {
                                     name={user.name}
                                     phone={user.phone}
                                     sent={user.sent}
-                                    remove={() => dispatch(removeUser(user.id))}
-                                    resend={() => dispatch(resendUser(user.id, user.name, user.phone))}
-                                    update={(name, phone)=> dispatch(updateUser(user.id, name, phone))}
+                                    remove={() => dispatch(removeUserAsync(user.id))}
+                                    resend={() => dispatch(addUserAsync({id: user.id, name:user.name, phone: user.phone}))}
+                                    update={(name, phone)=> dispatch(updateUserAsync({id: user.id, name: name, phone: phone}))}
 
                                 />
                             )
